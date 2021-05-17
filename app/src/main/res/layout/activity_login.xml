@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/android_gradient_3"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:splitMotionEvents="false"
     tools:context=".Login">
 
     <TextView
@@ -39,17 +43,17 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/Email"
+        android:id="@+id/email_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="16dp"
         android:background="@color/black"
+        android:drawableEnd="@drawable/ic_mail"
         android:ems="10"
         android:fontFamily="@font/aclonica"
         android:hint="Your Email"
-        android:drawableEnd="@drawable/ic_mail"
         android:inputType="textEmailAddress"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -63,17 +67,17 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/password_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/black"
+        android:drawableEnd="@drawable/ic_password"
         android:ems="10"
         android:fontFamily="@font/aclonica"
         android:hint="Password"
-        android:drawableEnd="@drawable/ic_password"
         android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -83,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Email"
+        app:layout_constraintTop_toBottomOf="@+id/email_login"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -99,7 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password_login"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
