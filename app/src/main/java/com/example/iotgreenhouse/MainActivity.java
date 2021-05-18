@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,12 +38,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView texTemp, texHum, texsetTemp, texsetHum;
-    EditText settem, sethum;
-    Button sumbtn, mAuto, mManual, mfanon, mfanoff, mpumpon, mpumpoff;
-
-    private LineChart mChart;
-
+    // log
+    private final static String TAG = "LOI";
+    Button mSumBtn, mAuto, mManual, mFanOn, mFanOff, mPumpOn, mPumpOff;
+    // Firebase instance
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mRootReference = firebaseDatabase.getReference();
     private DatabaseReference mTempReference = mRootReference.child("Right").child("Temperature");
@@ -53,33 +52,43 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mManualReference = mRootReference.child("Right").child("Control").child("Manual");
     private DatabaseReference mFanReference = mRootReference.child("Right").child("Control").child("Fan");
     private DatabaseReference mPumpReference = mRootReference.child("Right").child("Control").child("Pump");
-
+    // UI
+    private TextView mTvTemp, mTvHum, mTvSetTemp, mTvSetHum;
+    private EditText mSetTemp, mSetHum;
+    private LineChart mChart;
     private Thread thread;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settem = findViewById(R.id.setTem);
-        sethum = findViewById(R.id.setHum);
-        sumbtn = findViewById(R.id.summitbtn);
-        texTemp = findViewById(R.id.Temp);
-        texHum = findViewById(R.id.Hum);
-        texsetTemp = findViewById(R.id.SetValueTem);
-        texsetHum = findViewById(R.id.SetValueHum);
-        mAuto = findViewById(R.id.autobtn);
-        mManual = findViewById(R.id.manualbtn);
-        mfanon = findViewById(R.id.fanon);
-        mfanoff = findViewById(R.id.fanoff);
-        mpumpon = findViewById(R.id.pumpon);
-        mpumpoff = findViewById(R.id.pumpoff);
-
-        mChart = findViewById(R.id.line_chart_main);
+        // Function to set id to view
+        initView();
+        initChart(mChart);
+        setSupportActionBar(mToolbar);
 
         mAuto.setOnClickListener(v -> {
             mAutoReference.setValue(1);
             mManualReference.setValue(0);
+
+            mFanOn.setClickable(false);
+            mFanOn.setFocusable(false);
+            mFanOn.setFocusableInTouchMode(false);
+
+            mFanOff.setClickable(false);
+            mFanOff.setFocusable(false);
+            mFanOff.setFocusableInTouchMode(false);
+
+            mPumpOn.setClickable(false);
+            mPumpOn.setFocusable(false);
+            mPumpOn.setFocusableInTouchMode(false);
+
+            mPumpOff.setClickable(false);
+            mPumpOff.setFocusable(false);
+            mPumpOff.setFocusableInTouchMode(false);
+
         });
 
         mManual.setOnClickListener(v -> {
@@ -87,24 +96,28 @@ public class MainActivity extends AppCompatActivity {
             mAutoReference.setValue(0);
         });
 
-        mfanon.setOnClickListener(v -> {
+        mFanOn.setOnClickListener(v -> {
             mFanReference.setValue(1);
             Toast.makeText(MainActivity.this, "Fan On", Toast.LENGTH_SHORT).show();
         });
 
-        mfanoff.setOnClickListener(v -> {
+        mFanOff.setOnClickListener(v -> {
             mFanReference.setValue(0);
             Toast.makeText(MainActivity.this, "Fan Off", Toast.LENGTH_SHORT).show();
         });
 
-        mpumpon.setOnClickListener(v -> {
+        mPumpOn.setOnClickListener(v -> {
             mPumpReference.setValue(1);
             Toast.makeText(MainActivity.this, "Pump On", Toast.LENGTH_SHORT).show();
+            mPumpOn.setBackgroundColor(getResources().getColor(R.color.red));
+            mPumpOff.setBackgroundColor(getResources().getColor(R.color.purple_500));
         });
 
-        mpumpoff.setOnClickListener(v -> {
+        mPumpOff.setOnClickListener(v -> {
             mPumpReference.setValue(0);
             Toast.makeText(MainActivity.this, "Pump Off", Toast.LENGTH_SHORT).show();
+            mPumpOff.setBackgroundColor(getResources().getColor(R.color.red));
+            mPumpOn.setBackgroundColor(getResources().getColor(R.color.purple_500));
         });
 
         mTempReference.addValueEventListener(new ValueEventListener() {
@@ -112,85 +125,168 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     mTempReference.setValue(snapshot.getValue());
-                    texTemp.setText("Temperature: " + snapshot.getValue() + " °C");
-                    String convertedToString = snapshot.getValue() + "";
-                    float convertValue;
-                    convertValue = Float.parseFloat(convertedToString);
-                    convertValue /= 100f;
-                    addEntry(convertValue);
+
+                    String valueToShow =
+                            String.format(
+                                    "Temperature: %s °C",
+                                    snapshot.getValue()
+                            );
+                    mTvTemp.setText(valueToShow);
+
+                    String valueTemp = snapshot.getValue() + "";
+                    float floatTempChartValue;
+                    floatTempChartValue = Float.parseFloat(valueTemp);
+                    floatTempChartValue /= 100f;
+
+                    float finalFloatTempChartValue = floatTempChartValue;
+                    mHumReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            if (snapshot.getValue() != null) {
+                                String valueHum = snapshot.getValue() + "";
+                                float floatHumChartValue;
+                                floatHumChartValue = Float.parseFloat(valueHum);
+                                floatHumChartValue /= 100f;
+                                addEntry(finalFloatTempChartValue, floatHumChartValue);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            Log.e(TAG, "onCancelled: " + error);
+                        }
+                    });
                 }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                Log.e(TAG, "onCancelled: " + error);
             }
         });
 
         mHumReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                mHumReference.setValue(snapshot.getValue());
-                texHum.setText("Hummidity: " + snapshot.getValue() + " %");
+                if (snapshot.getValue() != null) {
+                    mHumReference.setValue(snapshot.getValue());
+
+                    String valueToShow =
+                            String.format(
+                                    "Humidity: %s %%",
+                                    snapshot.getValue()
+                            );
+                    mTvHum.setText(valueToShow);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                Log.e(TAG, "onCancelled: " + error);
             }
         });
 
         mSetTemReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                texsetTemp.setText("Set Value Temperature: " + snapshot.getValue().toString() + " °C");
+                if (snapshot.getValue() != null) {
+                    String valueToShow = String.format(
+                            "Set Value Temperature: %s °C",
+                            snapshot.getValue().toString()
+                    );
+                    mTvSetTemp.setText(valueToShow);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                Log.e(TAG, "onCancelled: " + error);
             }
         });
 
         mSetHumReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                texsetHum.setText("Set Value Hummidity: " + snapshot.getValue().toString() + " %");
+                if (snapshot.getValue() != null) {
+                    String valueToShow =
+                            String.format(
+                                    "Set Value Humidity: %s %%",
+                                    snapshot.getValue().toString()
+                            );
+                    mTvSetHum.setText(valueToShow);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                Log.e(TAG, "onCancelled: " + error);
             }
         });
 
-        sumbtn.setOnClickListener(v -> {
-            String setTemp = settem.getText().toString().trim();
-            String setHum = sethum.getText().toString().trim();
+        mSumBtn.setOnClickListener(v -> {
+            String setTemp = mSetTemp.getText().toString().trim();
+            String setHum = mSetHum.getText().toString().trim();
+
             if (TextUtils.isEmpty(setTemp)) {
-                settem.setError("Don't leave blank");
+                mSetTemp.setError("Don't leave blank");
                 return;
             }
             if (TextUtils.isEmpty(setHum)) {
-                sethum.setError("Don't leave blank");
-                return;
+                mSetHum.setError("Don't leave blank");
             } else {
                 mSetTemReference.setValue(setTemp);
                 mSetHumReference.setValue(setHum);
             }
 //            float testValue = (float) Math.random();
-//            addEntry(testValue);
+//            float testValue2 = (float) Math.random();
+//            addEntry(testValue, testValue2);
         });
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        mFanReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String value = snapshot.getValue() + "";
+                    int convertValue = Integer.parseInt(value);
+                    if (convertValue == 1) {
+                        mFanOn.setBackgroundColor(getResources().getColor(R.color.red));
+                    } else if (convertValue == 0) {
+                        mFanOn.setBackgroundColor(getResources().getColor(R.color.purple_500));
+                    }
+                }
+            }
 
-        initChart(mChart);
-//        addEntry(31f);
-//        feedMultiple();
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: " + error);
+            }
+        });
 
     }
 
+    private void initView() {
+        // UI
+        mToolbar = findViewById(R.id.topAppBar);
+        mSetTemp = findViewById(R.id.setTem);
+        mSetHum = findViewById(R.id.setHum);
+        mSumBtn = findViewById(R.id.summitbtn);
+        mTvTemp = findViewById(R.id.Temp);
+        mTvHum = findViewById(R.id.Hum);
+        mTvSetTemp = findViewById(R.id.SetValueTem);
+        mTvSetHum = findViewById(R.id.SetValueHum);
+        mAuto = findViewById(R.id.autobtn);
+        mManual = findViewById(R.id.manualbtn);
+        mFanOn = findViewById(R.id.fanon);
+        mFanOff = findViewById(R.id.fanoff);
+        mPumpOn = findViewById(R.id.pumpon);
+        mPumpOff = findViewById(R.id.pumpoff);
+
+        // Chart
+        mChart = findViewById(R.id.line_chart_main);
+    }
+
+    // Function to initialize chart
     private void initChart(LineChart chart) {
         chart.getDescription().setEnabled(false);
 
@@ -225,21 +321,29 @@ public class MainActivity extends AppCompatActivity {
         rightAxis.setEnabled(false);
     }
 
-    private void addEntry(float temp) {
+    // add value to chart
+    // note: value must be in range 0..1
+    private void addEntry(float temp, float hum) {
         LineData data = mChart.getData();
 
         if (data != null) {
             ILineDataSet set = data.getDataSetByIndex(0);
+            ILineDataSet set2 = data.getDataSetByIndex(1);
 
             if (set == null) {
                 set = createSet();
                 data.addDataSet(set);
             }
 
+            if (set2 == null) {
+                set2 = createSet2();
+                data.addDataSet(set2);
+            }
+
             data.addEntry(new Entry(set.getEntryCount(), temp * 100f), 0);
+            data.addEntry(new Entry(set2.getEntryCount(), hum * 100f), 1);
 
             data.notifyDataChanged();
-            data.setValueFormatter(new CustomValueFormatter());
             data.setValueTextColor(Color.BLACK);
             mChart.notifyDataSetChanged();
             mChart.setVisibleXRangeMaximum(5);
@@ -248,45 +352,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // create data set for chart
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, "Temp");
-        set.setValueFormatter(new CustomValueFormatter());
+
+        set.setValueFormatter(new CustomTempValueFormatter());
+
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(Color.BLACK);
         set.setLineWidth(2f);
         set.setCircleRadius(4f);
         set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(Color.BLACK);
-        set.setValueTextSize(16f);
+        set.setValueTextSize(12f);
         set.setDrawValues(true);
         return set;
     }
 
+    private LineDataSet createSet2() {
+        LineDataSet set = new LineDataSet(null, "Hump");
+        set.setValueFormatter(new CustomHumValueFormatter());
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.rgb("#F20000"));
+        set.setCircleColor(Color.BLACK);
+        set.setLineWidth(2f);
+        set.setCircleRadius(4f);
+        set.setFillAlpha(65);
+        set.setValueTextColor(Color.BLACK);
+        set.setValueTextSize(12f);
+        set.setDrawValues(true);
+        return set;
+    }
+
+    // Loop to test chart
     private void feedMultiple() {
         if (thread != null)
             thread.interrupt();
 
         final Runnable runnable = () -> {
+            //addEntry();
+        };
 
-        };//addEntry();
+        thread = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
 
-        thread = new Thread(new Runnable() {
+                // Don't generate garbage runnable inside the loop.
+                runOnUiThread(runnable);
 
-            @Override
-            public void run() {
-                for (int i = 0; i < 1000; i++) {
-
-                    // Don't generate garbage runnables inside the loop.
-                    runOnUiThread(runnable);
-
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -294,28 +411,6 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-//    private LineDataSet createSet2() {
-//        set2 = new LineDataSet(null, "Humidity");
-//        set2.setAxisDependency(YAxis.AxisDependency.RIGHT);
-//
-//        set2.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//        set2.setCubicIntensity(0.2f);
-//
-//        set2.setColor(Color.BLACK);
-//        set2.setCircleColor(Color.BLACK);
-//        set2.setDrawFilled(false);
-//        set2.setDrawCircles(false);
-//        set2.setLineWidth(2f);
-//        set2.setFillAlpha(65);
-//        set2.setFillColor(ColorTemplate.getHoloBlue());
-//        set2.setHighLightColor(Color.rgb(244, 117, 117));
-//        set2.setValueTextColor(Color.WHITE);
-//        set2.setValueTextSize(9f);
-//        set2.setDrawValues(false);
-//
-//        set2.setLabel("");
-//        return set2;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -326,14 +421,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), Login.class));
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finish();
         }
+        return super.onOptionsItemSelected(item);
 
     }
 

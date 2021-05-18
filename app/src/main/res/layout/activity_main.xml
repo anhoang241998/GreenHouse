@@ -28,90 +28,109 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/Temp"
+            android:id="@+id/title1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:text="TextView"
+            android:text="Title 1:"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/Hum"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/container_temp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:text="TextView"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/Temp"
-            app:layout_constraintStart_toStartOf="@+id/Temp"
-            app:layout_constraintTop_toBottomOf="@id/Temp" />
-
-        <EditText
-            android:id="@+id/setTem"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:hint="Set Value Temperature"
-            android:inputType="numberDecimal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/summitbtn"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:background="@drawable/border_linear_layout"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SetValueHum"
-            app:layout_constraintVertical_bias="0.05" />
+            app:layout_constraintTop_toBottomOf="@id/title1">
 
-        <EditText
-            android:id="@+id/setHum"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:hint="Set Value Hummidity"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="@+id/setTem"
-            app:layout_constraintStart_toStartOf="@+id/setTem"
-            app:layout_constraintTop_toBottomOf="@+id/setTem" />
+            <TextView
+                android:id="@+id/Temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/summitbtn"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/Hum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/SetValueTem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/SetValueHum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Summit"
-            app:layout_constraintBottom_toBottomOf="@+id/setHum"
+            android:background="@drawable/border_linear_layout"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/setTem"
-            app:layout_constraintTop_toTopOf="@+id/setTem" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_temp"
+            app:layout_constraintVertical_bias="0.05">
 
-        <TextView
-            android:id="@+id/SetValueTem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:text="TextView"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/Hum"
-            app:layout_constraintStart_toStartOf="@+id/Hum"
-            app:layout_constraintTop_toBottomOf="@id/Hum" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/SetValueHum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:text="TextView"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/SetValueTem"
-            app:layout_constraintStart_toStartOf="@+id/SetValueTem"
-            app:layout_constraintTop_toBottomOf="@id/SetValueTem" />
+                <EditText
+                    android:id="@+id/setTem"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:hint="Set Value Temperature"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/setHum"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:hint="Set Value Hummidity"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/summitbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:text="Summit" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/autobtn"
@@ -147,7 +166,7 @@
             android:text="Fan"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/pumpon"
+            app:layout_constraintBottom_toTopOf=" @+id/pumpon"
             app:layout_constraintEnd_toStartOf="@+id/fanon"
             app:layout_constraintTop_toTopOf="@+id/fanon" />
 
@@ -199,7 +218,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.76"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fanon"
+            app:layout_constraintTop_toBottomOf="@id/fanon"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
@@ -222,7 +241,7 @@
             app:layout_constraintBottom_toTopOf="@+id/fanon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setHum" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
