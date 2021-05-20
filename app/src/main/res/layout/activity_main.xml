@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/topAppBar2"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -21,227 +21,83 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="4dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/title1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title 1:"
+            android:text="Chose Side to Control"
+            android:layout_gravity="center"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginBottom="25dp">
+
+
+        </TextView>
 
         <LinearLayout
-            android:id="@+id/container_temp"
-            android:layout_width="match_parent"
+            android:id="@+id/mainchose"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/border_linear_layout"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title1">
-
-            <TextView
-                android:id="@+id/Temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/Hum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/SetValueTem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/SetValueHum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_linear_layout"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/container_temp"
-            app:layout_constraintVertical_bias="0.05">
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/right1"
                 android:layout_width="wrap_content"
+                android:background="@drawable/border_linear_layout"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/setTem"
+                <ImageView
+                    android:id="@+id/imageView1"
                     android:layout_width="200dp"
-                    android:layout_height="40dp"
-                    android:hint="Set Value Temperature"
-                    android:inputType="numberDecimal" />
+                    android:layout_height="200dp"
+                    android:background="@drawable/free_tree_thumb" />
 
-                <EditText
-                    android:id="@+id/setHum"
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
-                    android:hint="Set Value Hummidity"
-                    android:inputType="numberDecimal" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textStyle="italic"
+                    android:text="Right Side"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/summitbtn"
+            <LinearLayout
+                android:id="@+id/left1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:text="Summit" />
+                android:background="@drawable/border_linear_layout"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:background="@drawable/icon_water" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textStyle="italic"
+                    android:text="Left Side"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/autobtn"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:text="Auto"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.049"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.918" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/manualbtn"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:text="Manual"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.051"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autobtn"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Fan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Fan"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf=" @+id/pumpon"
-            app:layout_constraintEnd_toStartOf="@+id/fanon"
-            app:layout_constraintTop_toTopOf="@+id/fanon" />
-
-        <TextView
-            android:id="@+id/Pump"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Pump "
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/pumpon"
-            app:layout_constraintEnd_toStartOf="@+id/pumpon"
-            app:layout_constraintTop_toBottomOf="@+id/fanon" />
-
-        <Button
-            android:id="@+id/fanon"
-            android:layout_width="60dp"
-            android:layout_height="37dp"
-            android:text="on"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.76"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.919" />
-
-        <Button
-            android:id="@+id/pumpoff"
-            android:layout_width="60dp"
-            android:layout_height="37dp"
-            android:text="off"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toEndOf="@+id/pumpon"
-            app:layout_constraintTop_toBottomOf="@+id/fanoff"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Button
-            android:id="@+id/pumpon"
-            android:layout_width="60dp"
-            android:layout_height="37dp"
-            android:text="on"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.76"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fanon"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Button
-            android:id="@+id/fanoff"
-            android:layout_width="60dp"
-            android:layout_height="37dp"
-            android:text="off"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toEndOf="@+id/fanon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.919" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/line_chart_main"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/fanon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

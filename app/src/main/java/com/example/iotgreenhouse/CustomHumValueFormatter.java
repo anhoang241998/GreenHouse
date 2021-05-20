@@ -14,7 +14,7 @@ public class CustomHumValueFormatter extends ValueFormatter {
         float number  = BigDecimal.valueOf(value)
                 .setScale(2, BigDecimal.ROUND_HALF_DOWN)
                 .floatValue();
-        return number + "%%";
+        return number + "%";
     }
 
 }
