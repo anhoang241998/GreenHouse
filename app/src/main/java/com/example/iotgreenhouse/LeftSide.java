@@ -32,8 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 
 public class LeftSide extends AppCompatActivity {
@@ -185,7 +184,7 @@ public class LeftSide extends AppCompatActivity {
 
         mAuto1Reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     String value = snapshot.getValue() + "";
                     int convertValue = Integer.parseInt(value);
